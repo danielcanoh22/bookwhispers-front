@@ -6,10 +6,10 @@ import {
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Redirect, Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -34,16 +34,23 @@ export default function RootLayout() {
     return null;
   }
 
+  // if (!isAuthenticated) return <Redirect href="/(auth)/login" />;
+
   return (
     <GluestackUIProvider mode="light">
       <SafeAreaProvider>
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          {/* <Stack>
+            {isAuthenticated ? (
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            ) : (
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            )}
             <Stack.Screen name="+not-found" />
-          </Stack>
+          </Stack> */}
+          <Slot />
           <StatusBar style="auto" />
         </ThemeProvider>
       </SafeAreaProvider>
