@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/ThemedView";
 import { Heading } from "@/components/ui/heading";
 
+
 export default function TabTwoScreen() {
   const insets = useSafeAreaInsets();
 
