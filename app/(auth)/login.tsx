@@ -21,23 +21,27 @@ import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
-// import { Link, LinkText } from "@/components/ui/link";
-import { HStack } from "@/components/ui/hstack";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { useAuth } from "@/context/auth";
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+
+  const { login } = useAuth();
 
   const [isValid, setIsValid] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
-    if (email.length < 6 || password.length < 6) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
+    // if (email.length < 6 || password.length < 6) {
+    //   setIsValid(true);
+    // } else {
+    //   setIsValid(false);
+    // }
+    login();
+    router.push("/(tabs)");
   };
 
   return (

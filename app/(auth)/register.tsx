@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { User } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState } from "react";
@@ -13,9 +13,12 @@ import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Text } from "@/components/ui/text";
+import { useAuth } from "@/context/auth";
 
 export default function RegisterScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const { login } = useAuth();
 
   const [isValid, setIsValid] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -23,11 +26,13 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
-    if (email.length < 6) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
+    // if (email.length < 6) {
+    //   setIsValid(true);
+    // } else {
+    //   setIsValid(false);
+    // }
+    login();
+    router.push("/onboarding/genres");
   };
 
   return (
