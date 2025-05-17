@@ -16,7 +16,7 @@ export const HomeHeader = () => {
           </VStack>
         </Heading>
 
-        <Link href="/search/search" asChild>
+        <Link href="/(search)/search" asChild>
           <TouchableOpacity>
             <View className="bg-white p-3 rounded-lg mt-4">
               <Text className="text-gray-500">Buscar un libro...</Text>
