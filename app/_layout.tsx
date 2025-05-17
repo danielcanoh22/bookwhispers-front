@@ -34,23 +34,16 @@ export default function RootLayout() {
     return null;
   }
 
-  // if (!isAuthenticated) return <Redirect href="/(auth)/login" />;
-
   return (
     <GluestackUIProvider mode="light">
       <SafeAreaProvider>
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          {/* <Stack>
-            {isAuthenticated ? (
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            ) : (
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            )}
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
-          </Stack> */}
-          <Slot />
+          </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>
       </SafeAreaProvider>
