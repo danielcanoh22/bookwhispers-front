@@ -6,11 +6,7 @@ import { HomeHeader } from "@/components/homepage/header";
 import { ScreenContainer } from "@/components/common/container";
 import { VStack } from "@/components/ui/vstack";
 import { ScrollView } from "react-native";
-import { Heading } from "@/components/ui/heading";
 import { QueryProvider } from "../../providers/QueryProviders";
-import { TouchableOpacity } from "react-native";
-import { View, Text } from "react-native";
-import { Link } from "expo-router";
 
 const RECOMMENDED_BOOKS = [
   {
@@ -73,26 +69,17 @@ const ADVENTURE_BOOKS = [
   },
 ];
 
-
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
   return (
     <QueryProvider>
-        <ThemedView
+      <ThemedView
         style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
         className="h-screen"
-        >
+      >
         <ScrollView>
           <HomeHeader />
-          
-          <Link href="/search/search" asChild>
-            <TouchableOpacity>
-              <View className="bg-gray-200 p-3 rounded-lg mt-4">
-                <Text className="text-gray-500">Buscar un libro...</Text>
-              </View>
-            </TouchableOpacity>
-          </Link>
 
           <ScreenContainer>
             <VStack space="4xl">
@@ -103,6 +90,6 @@ export default function HomeScreen() {
           </ScreenContainer>
         </ScrollView>
       </ThemedView>
-     </QueryProvider>
+    </QueryProvider>
   );
 }
