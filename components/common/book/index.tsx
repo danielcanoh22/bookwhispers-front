@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     maxWidth: 100,
   },
   container: {
-    width: 100,
-    height: 150,
+    width: 90,
+    height: 140,
     position: "relative",
   },
   spine: {

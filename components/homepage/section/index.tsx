@@ -3,16 +3,11 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import { Book } from "@/components/common/book";
-
-type Book = {
-  id: string;
-  title: string;
-  imageUrl: string;
-};
+import { Book as BookType } from "@/types/global";
 
 type HomeSectionProps = {
   title: string;
-  books: Book[];
+  books: BookType[];
 };
 
 export const HomeSection = ({ title, books }: HomeSectionProps) => {
