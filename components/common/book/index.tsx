@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 type BookProps = {
   coverUrl: string;
-  title: string;
+  title?: string;
   bookColor: string;
 };
 
@@ -26,7 +26,7 @@ export const Book = ({ coverUrl, title, bookColor }: BookProps) => {
         <View style={styles.ribbon} />
       </View>
 
-      <Text style={styles.title}>{title}</Text>
+      {title && <Text style={styles.title}>{title}</Text>}
     </View>
   );
 };
