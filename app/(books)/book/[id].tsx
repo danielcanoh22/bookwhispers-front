@@ -96,7 +96,13 @@ export default function BookScreen() {
                     Deja tu opinión acerca de este libro
                   </Text>
                 </Box>
-                <Link href="/" className="text-right">
+                <Link
+                  href={{
+                    pathname: "/(books)/reviews/[id]",
+                    params: { id: String(id) },
+                  }}
+                  className="text-right"
+                >
                   <Box className="flex flex-row items-center gap-2">
                     <Text className="text-lg my-2 text-[#36A875]">
                       Ver todas las reseñas
