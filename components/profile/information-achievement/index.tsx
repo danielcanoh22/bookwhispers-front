@@ -10,7 +10,7 @@ export const ProfileInformationAchievement = ({
   achievement,
 }: InformationAchievementProps) => {
   return (
-    <Box className="w-20 h-20 bg-[#b0bd9b] p-2 flex flex-row items-center justify-center rounded-full">
+    <Box className="w-20 h-20 bg-[#7db99e] p-2 flex flex-row items-center justify-center rounded-full">
       <Image
         size="sm"
         source={achievement}
