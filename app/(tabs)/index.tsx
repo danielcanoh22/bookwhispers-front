@@ -7,6 +7,7 @@ import { ScreenContainer } from "@/components/common/container";
 import { VStack } from "@/components/ui/vstack";
 import { ScrollView } from "react-native";
 import { QueryProvider } from "../../providers/QueryProviders";
+import { FloatingActionButton } from "@/components/homepage/floating-button";
 
 const RECOMMENDED_BOOKS = [
   {
@@ -78,6 +79,7 @@ export default function HomeScreen() {
         style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
         className="h-screen"
       >
+        <FloatingActionButton />
         <ScrollView>
           <HomeHeader />
 
