@@ -10,3 +10,9 @@ export type User = {
   password: string;
   favorite_genres?: string[];
 };
+
+export type Message = {
+  id: string;
+  text: string;
+  sender: "user" | "ai";
+};
