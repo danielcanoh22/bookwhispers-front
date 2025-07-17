@@ -5,7 +5,7 @@ import { HomeSection } from "@/components/homepage/section";
 import { HomeHeader } from "@/components/homepage/header";
 import { ScreenContainer } from "@/components/common/container";
 import { VStack } from "@/components/ui/vstack";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { QueryProvider } from "../../providers/QueryProviders";
 import { FloatingActionButton } from "@/components/homepage/floating-button";
 
@@ -76,10 +76,12 @@ export default function HomeScreen() {
   return (
     <QueryProvider>
       <ThemedView
-        style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
-        className="h-screen"
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          flex: 1,
+        }}
       >
-        <FloatingActionButton />
         <ScrollView>
           <HomeHeader />
 
@@ -91,6 +93,7 @@ export default function HomeScreen() {
             </VStack>
           </ScreenContainer>
         </ScrollView>
+        <FloatingActionButton />
       </ThemedView>
     </QueryProvider>
   );
