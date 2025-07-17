@@ -1,58 +1,43 @@
 import { Box } from "@/components/ui/box";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { GenreCard } from "../card";
 
-const TEST_GENRES = [
-  {
-    id: "1",
-    name: "Fantasía",
-    imageKey: "fantasy",
-  },
-  {
-    id: "2",
-    name: "Ciencia Ficción",
-    imageKey: "science-fiction",
-  },
-  {
-    id: "3",
-    name: "Romance",
-    imageKey: "romance",
-  },
-  {
-    id: "4",
-    name: "Terror",
-    imageKey: "terror",
-  },
-  {
-    id: "5",
-    name: "Misterio",
-    imageKey: "mystery",
-  },
-  {
-    id: "6",
-    name: "Aventura",
-    imageKey: "adventure",
-  },
-  {
-    id: "7",
-    name: "Juvenil",
-    imageKey: "juvenile",
-  },
-  {
-    id: "8",
-    name: "Poesía",
-    imageKey: "poetry",
-  },
-];
+type Genre = {
+  id: string;
+  name: string;
+  genreKey: string;
+};
 
-export const GenresList = () => {
+type GenresListProps = {
+  genres: Genre[];
+  selectedGenres: string[];
+  setSelectedGenres: Dispatch<SetStateAction<string[]>>;
+};
+
+export const GenresList = ({
+  genres,
+  selectedGenres,
+  setSelectedGenres,
+}: GenresListProps) => {
+  const handleToggleGenre = (genreKey: string) => {
+    setSelectedGenres((prevSelected) => {
+      if (prevSelected.includes(genreKey)) {
+        return prevSelected.filter((key) => key !== genreKey);
+      } else {
+        return [...prevSelected, genreKey];
+      }
+    });
+  };
+
   return (
     <Box className="flex-row flex-wrap justify-between">
-      {TEST_GENRES.map((genre) => (
+      {genres.map((genre) => (
         <GenreCard
           key={genre.id}
           genre={genre.name}
-          imageKey={genre.imageKey}
+          genreKey={genre.genreKey}
+          isSelected={selectedGenres.includes(genre.genreKey)}
+          onPress={() => handleToggleGenre(genre.genreKey)}
         />
       ))}
     </Box>

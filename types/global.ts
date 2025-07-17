@@ -3,3 +3,10 @@ export type Book = {
   title: string;
   imageUrl: string;
 };
+
+export type User = {
+  username: string;
+  email: string;
+  password: string;
+  favorite_genres?: string[];
+};

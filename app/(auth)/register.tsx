@@ -1,11 +1,16 @@
 import { Link, useRouter } from "expo-router";
-import { User } from "lucide-react-native";
+import { AlertTriangle, User } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState } from "react";
 
 import { ThemedView } from "@/components/ThemedView";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
-import { FormControl } from "@/components/ui/form-control";
+import {
+  FormControl,
+  FormControlError,
+  FormControlErrorIcon,
+  FormControlErrorText,
+} from "@/components/ui/form-control";
 import { Heading } from "@/components/ui/heading";
 import { MailIcon, LockIcon, ExternalLinkIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
@@ -13,26 +18,58 @@ import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Text } from "@/components/ui/text";
-import { useAuth } from "@/context/auth";
+import { Alert } from "react-native";
 
 export default function RegisterScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { login } = useAuth();
 
-  const [isValid, setIsValid] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const validateForm = () => {
+    const newErrors = { fullName: "", username: "", email: "", password: "" };
+    let isValid = true;
+
+    if (!formData.username.trim()) {
+      newErrors.username = "El nombre de usuario es requerido.";
+      isValid = false;
+    }
+    if (!formData.email.includes("@")) {
+      newErrors.email = "Por favor, ingresa un correo válido.";
+      isValid = false;
+    }
+    if (formData.password.length < 6) {
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres.";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = () => {
-    // if (email.length < 6) {
-    //   setIsValid(true);
-    // } else {
-    //   setIsValid(false);
-    // }
-    login();
-    router.push("/onboarding/genres");
+    if (validateForm()) {
+      router.push({
+        pathname: "/onboarding/genres",
+        params: formData,
+      });
+    } else {
+      Alert.alert("Formulario inválido", "Por favor corrige los errores.");
+    }
   };
 
   return (
@@ -46,19 +83,26 @@ export default function RegisterScreen() {
             Crear una Cuenta
           </Heading>
         </Box>
-        <FormControl isInvalid={isValid}>
-          <VStack space="4xl">
+        <VStack space="4xl">
+          <FormControl isInvalid={!!errors.username}>
             <Input className="" variant="underlined" size="lg">
               <InputSlot className="pr-2">
                 <InputIcon as={User} />
               </InputSlot>
               <InputField
                 type="text"
-                placeholder="Jefferson Gutierritos"
-                value={fullName}
-                onChangeText={(value) => setFullName(value)}
+                placeholder="Nombre de usuario (ej. sarah25)"
+                value={formData.username}
+                onChangeText={(value) => handleInputChange("username", value)}
               />
             </Input>
+            <FormControlError>
+              <FormControlErrorIcon as={AlertTriangle} size="xs" />
+              <FormControlErrorText>{errors.username}</FormControlErrorText>
+            </FormControlError>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.email}>
             <Input className="" variant="underlined" size="lg">
               <InputSlot className="pr-2">
                 <InputIcon as={MailIcon} />
@@ -66,10 +110,17 @@ export default function RegisterScreen() {
               <InputField
                 type="text"
                 placeholder="correo@ejemplo.com"
-                value={email}
-                onChangeText={(value) => setEmail(value)}
+                value={formData.email}
+                onChangeText={(value) => handleInputChange("email", value)}
               />
             </Input>
+            <FormControlError>
+              <FormControlErrorIcon as={AlertTriangle} size="xs" />
+              <FormControlErrorText>{errors.email}</FormControlErrorText>
+            </FormControlError>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.email}>
             <Input className="" variant="underlined" size="lg">
               <InputSlot className="pr-2">
                 <InputIcon as={LockIcon} />
@@ -77,19 +128,24 @@ export default function RegisterScreen() {
               <InputField
                 type="password"
                 placeholder="Ingresa tu contraseña"
-                value={password}
-                onChangeText={(value) => setPassword(value)}
+                value={formData.password}
+                onChangeText={(value) => handleInputChange("password", value)}
               />
             </Input>
-            <Button
-              size="lg"
-              className="bg-[#36A875] text-white font-medium pressed:bg-red-500"
-              onPress={handleSubmit}
-            >
-              <ButtonText>Registrarse</ButtonText>
-            </Button>
-          </VStack>
-        </FormControl>
+            <FormControlError>
+              <FormControlErrorIcon as={AlertTriangle} size="xs" />
+              <FormControlErrorText>{errors.password}</FormControlErrorText>
+            </FormControlError>
+          </FormControl>
+
+          <Button
+            size="lg"
+            className="bg-[#36A875] text-white font-medium"
+            onPress={handleSubmit}
+          >
+            <ButtonText>Registrarse</ButtonText>
+          </Button>
+        </VStack>
 
         <Divider className="my-8" />
 
