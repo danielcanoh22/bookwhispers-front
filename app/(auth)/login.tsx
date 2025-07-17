@@ -24,7 +24,6 @@ import { Text } from "@/components/ui/text";
 import { Link, useRouter } from "expo-router";
 import { useAuth } from "@/context/auth";
 import { AlertTriangle } from "lucide-react-native";
-import { loginUser } from "@/services/auth/api";
 import { Alert } from "react-native";
 
 export default function LoginScreen() {

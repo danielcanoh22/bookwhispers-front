@@ -7,7 +7,7 @@ import { Book as BookType } from "@/types/global";
 
 type HomeSectionProps = {
   title: string;
-  books: BookType[];
+  books: BookType[] | undefined;
 };
 
 export const HomeSection = ({ title, books }: HomeSectionProps) => {
@@ -30,7 +30,7 @@ export const HomeSection = ({ title, books }: HomeSectionProps) => {
       {/* #002e48 #604300 #25a2c4 */}
 
       <View className="flex flex-row flex-wrap justify-between mt-4">
-        {books.map((book) => (
+        {books?.map((book) => (
           <View key={book.id}>
             <Link
               href={{
@@ -42,7 +42,7 @@ export const HomeSection = ({ title, books }: HomeSectionProps) => {
               <TouchableOpacity>
                 <Book
                   title={book.title}
-                  coverUrl={book.imageUrl}
+                  coverUrl={book.coverUrl}
                   bookColor="#25a2c4"
                 />
               </TouchableOpacity>

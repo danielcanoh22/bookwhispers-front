@@ -1,7 +1,9 @@
 export type Book = {
   id: string;
   title: string;
-  imageUrl: string;
+  authors?: string[];
+  coverUrl: string;
+  description?: string | string[];
 };
 
 export type User = {

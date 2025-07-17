@@ -8,6 +8,8 @@ import { VStack } from "@/components/ui/vstack";
 import { ScrollView, View } from "react-native";
 import { QueryProvider } from "../../providers/QueryProviders";
 import { FloatingActionButton } from "@/components/homepage/floating-button";
+import { useRecommendedBooks } from "@/hooks/useRecommendedBooks";
+import { Message } from "@/components/common/message";
 
 const RECOMMENDED_BOOKS = [
   {
@@ -73,6 +75,8 @@ const ADVENTURE_BOOKS = [
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
+  const { recommendedBooks, isLoading, isError, error } = useRecommendedBooks();
+
   return (
     <QueryProvider>
       <ThemedView
@@ -87,9 +91,17 @@ export default function HomeScreen() {
 
           <ScreenContainer>
             <VStack space="4xl">
-              <HomeSection title="Recomendados" books={RECOMMENDED_BOOKS} />
-              <HomeSection title="Misterio" books={MYSTERY_BOOKS} />
-              <HomeSection title="Aventura" books={ADVENTURE_BOOKS} />
+              {isLoading ? (
+                <Message text="Cargando libros recomendados..." />
+              ) : (
+                <HomeSection
+                  title="Recomendados"
+                  books={recommendedBooks?.slice(0, 3)}
+                />
+              )}
+
+              {/* <HomeSection title="Misterio" books={MYSTERY_BOOKS} />
+              <HomeSection title="Aventura" books={ADVENTURE_BOOKS} /> */}
             </VStack>
           </ScreenContainer>
         </ScrollView>

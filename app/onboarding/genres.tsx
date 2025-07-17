@@ -5,7 +5,7 @@ import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { useAuth } from "@/context/auth";
-import { registerUser } from "@/services/auth/api";
+import { registerUser } from "@/services/auth";
 import { User } from "@/types/global";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";

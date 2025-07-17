@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 
-import { searchBooks } from "@/services/search/api/books";
+import { searchBooks } from "@/services/books";
 import { SearchBar } from "@/components/search/search-bar";
 import { ThemedView } from "@/components/ThemedView";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
