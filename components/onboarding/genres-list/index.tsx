@@ -19,12 +19,12 @@ export const GenresList = ({
   selectedGenres,
   setSelectedGenres,
 }: GenresListProps) => {
-  const handleToggleGenre = (genreKey: string) => {
+  const handleToggleGenre = (genreName: string) => {
     setSelectedGenres((prevSelected) => {
-      if (prevSelected.includes(genreKey)) {
-        return prevSelected.filter((key) => key !== genreKey);
+      if (prevSelected.includes(genreName)) {
+        return prevSelected.filter((key) => key !== genreName);
       } else {
-        return [...prevSelected, genreKey];
+        return [...prevSelected, genreName];
       }
     });
   };
@@ -36,8 +36,8 @@ export const GenresList = ({
           key={genre.id}
           genre={genre.name}
           genreKey={genre.genreKey}
-          isSelected={selectedGenres.includes(genre.genreKey)}
-          onPress={() => handleToggleGenre(genre.genreKey)}
+          isSelected={selectedGenres.includes(genre.name)}
+          onPress={() => handleToggleGenre(genre.name)}
         />
       ))}
     </Box>

@@ -26,6 +26,8 @@ export default function BookScreen() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams();
 
+  console.log(id);
+
   const scrollViewRef = useRef<ScrollView>(null);
   const headerHeight = 80;
 

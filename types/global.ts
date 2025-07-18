@@ -11,6 +11,7 @@ export type User = {
   email: string;
   password: string;
   favorite_genres?: string[];
+  profile_picture: string;
 };
 
 export type Message = {

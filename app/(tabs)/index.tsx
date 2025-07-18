@@ -6,10 +6,11 @@ import { HomeHeader } from "@/components/homepage/header";
 import { ScreenContainer } from "@/components/common/container";
 import { VStack } from "@/components/ui/vstack";
 import { ScrollView, View } from "react-native";
-import { QueryProvider } from "../../providers/QueryProviders";
 import { FloatingActionButton } from "@/components/homepage/floating-button";
 import { useRecommendedBooks } from "@/hooks/useRecommendedBooks";
 import { Message } from "@/components/common/message";
+
+const icon = require("/assets/images/robot.png");
 
 const RECOMMENDED_BOOKS = [
   {
@@ -78,35 +79,33 @@ export default function HomeScreen() {
   const { recommendedBooks, isLoading, isError, error } = useRecommendedBooks();
 
   return (
-    <QueryProvider>
-      <ThemedView
-        style={{
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          flex: 1,
-        }}
-      >
-        <ScrollView>
-          <HomeHeader />
+    <ThemedView
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        flex: 1,
+      }}
+    >
+      <ScrollView>
+        <HomeHeader />
 
-          <ScreenContainer>
-            <VStack space="4xl">
-              {isLoading ? (
-                <Message text="Cargando libros recomendados..." />
-              ) : (
-                <HomeSection
-                  title="Recomendados"
-                  books={recommendedBooks?.slice(0, 3)}
-                />
-              )}
+        <ScreenContainer>
+          <VStack space="4xl">
+            {isLoading ? (
+              <Message text="Cargando libros recomendados..." />
+            ) : (
+              <HomeSection
+                title="Recomendados"
+                books={recommendedBooks?.slice(0, 3)}
+              />
+            )}
 
-              {/* <HomeSection title="Misterio" books={MYSTERY_BOOKS} />
+            {/* <HomeSection title="Misterio" books={MYSTERY_BOOKS} />
               <HomeSection title="Aventura" books={ADVENTURE_BOOKS} /> */}
-            </VStack>
-          </ScreenContainer>
-        </ScrollView>
-        <FloatingActionButton />
-      </ThemedView>
-    </QueryProvider>
+          </VStack>
+        </ScreenContainer>
+      </ScrollView>
+      <FloatingActionButton iconSource={icon} href="/chat/ai-chat" />
+    </ThemedView>
   );
 }

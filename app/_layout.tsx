@@ -16,6 +16,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "@/context/auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryProvider } from "@/providers/QueryProviders";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -40,7 +41,7 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider mode="light">
-      <QueryClientProvider client={queryClient}>
+      <QueryProvider>
         <AuthProvider>
           <SafeAreaProvider>
             <ThemeProvider
@@ -48,13 +49,21 @@ export default function RootLayout() {
             >
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="profile/edit-profile"
+                  options={{
+                    presentation: "modal",
+                    headerShown: true,
+                    title: "",
+                  }}
+                />
                 <Stack.Screen name="+not-found" />
               </Stack>
               <StatusBar style="auto" />
             </ThemeProvider>
           </SafeAreaProvider>
         </AuthProvider>
-      </QueryClientProvider>
+      </QueryProvider>
     </GluestackUIProvider>
   );
 }

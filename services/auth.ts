@@ -1,9 +1,11 @@
 import { AuthLoginResponse } from "@/types/auth";
 import { User } from "@/types/global";
 
-const BASE_URL = "https://bookwhispers-back.onrender.com/auth";
+// const BASE_URL = "https://bookwhispers-back.onrender.com/auth";
+const BASE_URL = "http://192.168.20.31:3000/auth";
 
 export async function registerUser(data: User) {
+  console.log("Registrando: ", data);
   try {
     const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
