@@ -40,3 +40,5 @@ export const GENRES = [
     genreKey: "dystopia",
   },
 ];
+
+export const BASE_URL = "https://bookwhispers-back.onrender.com";

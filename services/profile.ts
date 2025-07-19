@@ -2,8 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Alert } from "react-native";
 
 import * as SecureStore from "expo-secure-store";
-
-const BASE_URL = "http://192.168.20.31:3000";
+import { BASE_URL } from "@/utils/constants";
 
 export const selectImage = async () => {
   const permissionResult =
@@ -74,11 +73,8 @@ type UserProfileUpdatePayload = {
 export const updateUserProfile = async (
   updateData: UserProfileUpdatePayload
 ) => {
-  console.log("Vamos a ejecutar la función");
   try {
     const token = await SecureStore.getItemAsync("userToken");
-
-    console.log("El token: ", token);
 
     if (!token) {
       throw new Error("Usuario no autenticado.");
@@ -93,14 +89,10 @@ export const updateUserProfile = async (
       body: JSON.stringify(updateData),
     });
 
-    console.log(response);
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || "No se pudo actualizar el perfil");
     }
-
-    console.log("Pa actualizar: ", updateData);
 
     return response.json();
   } catch (error) {

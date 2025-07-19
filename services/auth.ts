@@ -1,13 +1,10 @@
 import { AuthLoginResponse } from "@/types/auth";
 import { User } from "@/types/global";
-
-// const BASE_URL = "https://bookwhispers-back.onrender.com/auth";
-const BASE_URL = "http://192.168.20.31:3000/auth";
+import { BASE_URL } from "@/utils/constants";
 
 export async function registerUser(data: User) {
-  console.log("Registrando: ", data);
   try {
-    const response = await fetch(`${BASE_URL}/register`, {
+    const response = await fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +25,7 @@ export async function loginUser(credentials: {
   password: string;
 }) {
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),

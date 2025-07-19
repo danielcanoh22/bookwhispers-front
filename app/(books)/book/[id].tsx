@@ -29,6 +29,9 @@ export default function BookScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { id, bookData } = useLocalSearchParams();
+  const queryClient = useQueryClient();
+  const scrollViewRef = useRef<ScrollView>(null);
+  const headerHeight = 80;
 
   const book: Book | undefined = useMemo(() => {
     if (typeof bookData === "string") {
@@ -51,8 +54,6 @@ export default function BookScreen() {
   if (!book) {
     return <ActivityIndicator size="large" style={{ flex: 1 }} />;
   }
-
-  const queryClient = useQueryClient();
 
   const { data: favoriteBooks, isLoading: isLoadingFavorites } = useQuery({
     queryKey: ["favorites"],
@@ -77,9 +78,6 @@ export default function BookScreen() {
       );
     },
   });
-
-  const scrollViewRef = useRef<ScrollView>(null);
-  const headerHeight = 80;
 
   const isFavorited = useMemo(() => {
     if (!favoriteBooks) return false;

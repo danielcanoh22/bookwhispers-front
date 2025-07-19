@@ -1,7 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 import { Book } from "@/types/global";
-
-const BASE_URL = "http://192.168.20.31:3000";
+import { BASE_URL } from "@/utils/constants";
 
 export const getUserFavorites = async (): Promise<Book[]> => {
   const token = await SecureStore.getItemAsync("userToken");
@@ -33,9 +32,6 @@ export const addFavoriteBook = async (bookData: Book) => {
     },
     body: JSON.stringify(bookData),
   });
-
-  console.log("Data: ", bookData);
-  console.log("Response: ", response);
 
   if (!response.ok) {
     throw new Error("No se pudo agregar el libro a favoritos.");

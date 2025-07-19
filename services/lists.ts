@@ -1,6 +1,5 @@
+import { BASE_URL } from "@/utils/constants";
 import * as SecureStore from "expo-secure-store";
-
-const BASE_URL = "https://bookwhispers-back.onrender.com";
 
 type CreateReadingListPayload = {
   name: string;

@@ -1,7 +1,6 @@
 import { Review } from "@/types/global";
+import { BASE_URL } from "@/utils/constants";
 import * as SecureStore from "expo-secure-store";
-
-const BASE_URL = "http://192.168.20.31:3000";
 
 type CreateReviewPayload = {
   text: string;
