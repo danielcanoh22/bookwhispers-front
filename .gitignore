@@ -35,4 +35,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Ignorar carpetas nativas generadas por Expo
+/android
+/ios
+
 app-example
