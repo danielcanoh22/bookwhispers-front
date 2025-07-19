@@ -47,10 +47,6 @@ export default function TabThreeScreen() {
           <ProfileInformation />
         </Box>
       </ScrollView>
-      {/* <EditProfileModal
-        isOpen={showEditModal}
-        onClose={() => setShowEditModal(false)}
-      /> */}
     </ThemedView>
   );
 }

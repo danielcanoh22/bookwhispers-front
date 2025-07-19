@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -15,6 +16,8 @@ import { Heading } from "@/components/ui/heading";
 import { ChatMessage } from "@/components/chat/chat-message";
 import { Input, InputField } from "@/components/ui/input";
 import { Message } from "@/types/global";
+import { useMutation } from "@tanstack/react-query";
+import { sendMessageToAI } from "@/services/chat";
 
 const INITIAL_MESSAGE = {
   id: "ai-welcome-message",
@@ -27,26 +30,62 @@ export default function ChatScreen() {
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [inputText, setInputText] = useState("");
 
-  const handleSend = () => {
-    if (inputText.trim().length === 0) return;
+  const chatMutation = useMutation({
+    mutationFn: sendMessageToAI,
+    onSuccess: (aiResponse) => {
+      let responseText = "";
 
-    const userMessage = {
+      if (aiResponse.type === "recommendation") {
+        responseText =
+          "¡Claro! Basado en lo que hablamos, te recomiendo estos libros:\n\n" +
+          aiResponse.content
+            .map(
+              (rec: any, index: any) =>
+                `${
+                  index + 1
+                }. ${rec.book.title.toUpperCase()} de ${rec.book.authors.join(
+                  ", "
+                )}\nRazón: ${rec.reason}`
+            )
+            .join("\n\n");
+      } else {
+        responseText = aiResponse.content;
+      }
+
+      const aiMessage: Message = {
+        id: new Date().toISOString() + "-ai",
+        text: responseText,
+        sender: "ai",
+      };
+      setMessages((prev) => [aiMessage, ...prev]);
+    },
+    onError: (error: Error) => {
+      Alert.alert("Error", error.message);
+    },
+  });
+
+  const handleSend = () => {
+    if (inputText.trim().length === 0 || chatMutation.isLoading) return;
+
+    const userMessage: Message = {
       id: new Date().toISOString(),
       text: inputText,
-      sender: "user" as const,
+      sender: "user",
     };
 
-    setMessages((prev) => [userMessage, ...prev]);
+    const updatedMessages = [userMessage, ...messages];
+    setMessages(updatedMessages);
     setInputText("");
 
-    setTimeout(() => {
-      const aiResponse = {
-        id: new Date().toISOString() + "-ai",
-        text: "Buscando la mejor recomendación para ti...",
-        sender: "ai" as const,
-      };
-      setMessages((prev) => [aiResponse, ...prev]);
-    }, 1500);
+    const historyForAPI = updatedMessages
+      .map((msg) => {
+        const role: "model" | "user" = msg.sender === "ai" ? "model" : "user";
+
+        return { role, text: msg.text };
+      })
+      .reverse();
+
+    chatMutation.mutate(historyForAPI);
   };
 
   return (
@@ -79,13 +118,19 @@ export default function ChatScreen() {
             <InputField
               value={inputText}
               onChangeText={setInputText}
-              placeholder="Escribe tu mensaje..."
+              placeholder={
+                chatMutation.isLoading
+                  ? "Biblio está pensando..."
+                  : "Escribe tu mensaje..."
+              }
               onSubmitEditing={handleSend}
+              readOnly={chatMutation.isLoading}
             />
           </Input>
           <Pressable
             onPress={handleSend}
             className="p-3 bg-[#36A875] rounded-full"
+            disabled={chatMutation.isLoading}
           >
             <Send size={24} color="white" />
           </Pressable>

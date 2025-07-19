@@ -1,35 +1,112 @@
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Star, MessageCircle, Heart } from "lucide-react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
-import { Link, useLocalSearchParams } from "expo-router";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
-import { Textarea, TextareaInput } from "@/components/ui/textarea";
-
-const TEST_BOOK = {
-  id: "1",
-  title: "Harry Potter y la Piedra Filosofal",
-  author: "J.K. Rowling",
-  description:
-    "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
-  imageUrl:
-    "https://silverlibros.com/wp-content/uploads/2022/02/9788498382662-HARRY-POTTER-1-Y-LA-PIEDRA-FILOSOFAL-PORTADA-2010.jpg",
-};
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  addFavoriteBook,
+  getUserFavorites,
+  removeFavoriteBook,
+} from "@/services/favorites";
+import { Book } from "@/types/global";
+import { ReviewForm } from "@/components/reviews/review-form";
 
 export default function BookScreen() {
   const insets = useSafeAreaInsets();
-  const { id } = useLocalSearchParams();
+  const router = useRouter();
+  const { id, bookData } = useLocalSearchParams();
 
-  console.log(id);
+  const book: Book | undefined = useMemo(() => {
+    if (typeof bookData === "string") {
+      try {
+        return JSON.parse(bookData);
+      } catch (e) {
+        console.error("Error al parsear los datos del libro:", e);
+        return null;
+      }
+    }
+    return null;
+  }, [bookData]);
+
+  useEffect(() => {
+    if (book === null) {
+      router.replace("/(tabs)");
+    }
+  }, [book, router]);
+
+  if (!book) {
+    return <ActivityIndicator size="large" style={{ flex: 1 }} />;
+  }
+
+  const queryClient = useQueryClient();
+
+  const { data: favoriteBooks, isLoading: isLoadingFavorites } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: getUserFavorites,
+  });
+
+  const addFavoriteMutation = useMutation({
+    mutationFn: addFavoriteBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+      Alert.alert("Favoritos", "El libro se agregó a favoritos correctamente");
+    },
+  });
+
+  const removeFavoriteMutation = useMutation({
+    mutationFn: removeFavoriteBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+      Alert.alert(
+        "Favoritos",
+        "El libro se eliminó de favoritos correctamente"
+      );
+    },
+  });
 
   const scrollViewRef = useRef<ScrollView>(null);
   const headerHeight = 80;
+
+  const isFavorited = useMemo(() => {
+    if (!favoriteBooks) return false;
+    return favoriteBooks.some((favBook) => favBook?.book_id === book.id);
+  }, [favoriteBooks, book.id]);
+
+  const handleToggleFavorite = () => {
+    if (isFavorited) {
+      removeFavoriteMutation.mutate(book.id);
+    } else {
+      const bookToAdd = {
+        id: book.id,
+        title: book.title,
+        authors: book.authors,
+        description: book.description,
+        coverUrl: book.coverUrl,
+      };
+
+      addFavoriteMutation.mutate(bookToAdd);
+    }
+  };
+
+  const handleReviewFormFocus = () => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  };
 
   return (
     <ThemedView
@@ -53,23 +130,34 @@ export default function BookScreen() {
             <Box className="pb-6 flex flex-col">
               <Box className="flex flex-col items-center gap-6 mt-6">
                 <Heading size="xl" className="text-[#9A7B62]">
-                  {TEST_BOOK.title}
+                  {book.title}
                 </Heading>
                 <Box className="w-52 h-72 shadow-md">
                   <Image
                     size="full"
                     source={{
-                      uri: TEST_BOOK.imageUrl,
+                      uri: book.coverUrl,
                     }}
-                    alt={`Portada del libro ${TEST_BOOK.title}`}
+                    alt={`Portada del libro ${book.title}`}
                   />
                 </Box>
               </Box>
             </Box>
             <Box className="bg-[#EFE5DB] border-t border-[#9A7B62] p-6">
               <Box className="flex flex-row justify-end mb-4">
-                <Button className="bg-white rounded-full p-1 w-14 h-14">
-                  <Heart color="#9A7B62" />
+                <Button
+                  className="bg-white rounded-full p-1 w-14 h-14"
+                  onPress={handleToggleFavorite}
+                  isDisabled={
+                    isLoadingFavorites ||
+                    addFavoriteMutation.isLoading ||
+                    removeFavoriteMutation.isLoading
+                  }
+                >
+                  <Heart
+                    color="#9A7B62"
+                    fill={isFavorited ? "#9A7B62" : "transparent"}
+                  />
                 </Button>
               </Box>
 
@@ -79,7 +167,7 @@ export default function BookScreen() {
                     Autor
                   </Text>
                   <Text className="text-lg text-[#9A7B62]">
-                    {TEST_BOOK.author}
+                    {book.authors?.join(", ")}
                   </Text>
                 </Box>
                 <Box className="flex flex-col gap-2">
@@ -87,7 +175,7 @@ export default function BookScreen() {
                     Descripción
                   </Text>
                   <Text className="text-lg text-[#9A7B62]">
-                    {TEST_BOOK.description}
+                    {book.description}
                   </Text>
                 </Box>
 
@@ -101,7 +189,7 @@ export default function BookScreen() {
                 <Link
                   href={{
                     pathname: "/(books)/reviews/[id]",
-                    params: { id: String(id) },
+                    params: { id: book.id },
                   }}
                   className="text-right"
                 >
@@ -112,29 +200,8 @@ export default function BookScreen() {
                     <Star className="ml-4" color="#E1B919" />
                   </Box>
                 </Link>
-                <Box className="flex flex-col gap-2">
-                  <Textarea
-                    size="md"
-                    isReadOnly={false}
-                    isInvalid={false}
-                    isDisabled={false}
-                    className="w-full bg-white"
-                  >
-                    <TextareaInput
-                      placeholder="Escribe tu reseña..."
-                      onFocus={() => {
-                        setTimeout(() => {
-                          scrollViewRef.current?.scrollToEnd({
-                            animated: true,
-                          });
-                        }, 100);
-                      }}
-                    />
-                  </Textarea>
-                  <Button className="bg-[#36A875] self-end px-8">
-                    <ButtonText>Enviar</ButtonText>
-                  </Button>
-                </Box>
+
+                <ReviewForm bookId={book.id} onFocus={handleReviewFormFocus} />
               </Box>
             </Box>
           </Box>

@@ -26,8 +26,6 @@ export default function GenreSelectionScreen() {
       favorite_genres: genresToSubmit,
     };
 
-    console.log("Datos: ", finalUserData);
-
     try {
       await registerUser(finalUserData);
 

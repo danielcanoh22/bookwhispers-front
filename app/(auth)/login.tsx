@@ -1,18 +1,12 @@
 import { ThemedView } from "@/components/ThemedView";
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import {
   FormControl,
   FormControlError,
   FormControlErrorIcon,
   FormControlErrorText,
 } from "@/components/ui/form-control";
-import { Heading } from "@/components/ui/heading";
-import {
-  AlertCircleIcon,
-  MailIcon,
-  LockIcon,
-  ExternalLinkIcon,
-} from "@/components/ui/icon";
+import { MailIcon, LockIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState } from "react";
@@ -25,6 +19,8 @@ import { Link, useRouter } from "expo-router";
 import { useAuth } from "@/context/auth";
 import { AlertTriangle } from "lucide-react-native";
 import { Alert } from "react-native";
+
+const logo = require("/assets/images/zorro.png");
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -101,14 +97,8 @@ export default function LoginScreen() {
     >
       <Box className="flex flex-col justify-center h-full px-4">
         <Box className="flex flex-col items-center gap-2 mb-10">
-          <Image
-            size="xl"
-            source={{
-              uri: "https://th.bing.com/th/id/OIP.tIgd6r8_AncWDtVMUZFLbQHaGx?rs=1&pid=ImgDetMain",
-            }}
-            alt="image"
-          />
-          <Heading className="text-slate-500 text-2xl">BookWhispers</Heading>
+          <Image size="2xl" source={logo} alt="image" />
+          {/* <Heading className="text-slate-500 text-2xl">BookWhispers</Heading> */}
         </Box>
         <VStack space="4xl">
           <FormControl isInvalid={!!errors.usernameOrEmail}>
@@ -171,11 +161,6 @@ export default function LoginScreen() {
             Regístrate
           </Link>
         </Box>
-
-        <Button size="lg" className="bg-[#c5b3a3] text-white font-medium">
-          <ButtonIcon as={ExternalLinkIcon} />
-          <ButtonText>Iniciar sesión con Google</ButtonText>
-        </Button>
       </Box>
     </ThemedView>
   );

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState } from "react";
 
 import { ThemedView } from "@/components/ThemedView";
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import {
   FormControl,
   FormControlError,
@@ -12,7 +12,7 @@ import {
   FormControlErrorText,
 } from "@/components/ui/form-control";
 import { Heading } from "@/components/ui/heading";
-import { MailIcon, LockIcon, ExternalLinkIcon } from "@/components/ui/icon";
+import { MailIcon, LockIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
@@ -158,11 +158,6 @@ export default function RegisterScreen() {
             Ingresa aquí
           </Link>
         </Box>
-
-        <Button size="lg" className="bg-[#c5b3a3] text-white font-medium">
-          <ButtonIcon as={ExternalLinkIcon} />
-          <ButtonText>Iniciar sesión con Google</ButtonText>
-        </Button>
       </Box>
     </ThemedView>
   );

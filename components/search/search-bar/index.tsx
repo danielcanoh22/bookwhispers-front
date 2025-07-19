@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, InputField } from "@/components/ui/input";
 
 type SearchBarProps = {
@@ -9,14 +9,14 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      if (query.trim().length > 2) {
+    const timer = setTimeout(() => {
+      if (query.length === 0 || query.length > 2) {
         onSearch(query);
       }
     }, 500);
 
-    return () => clearTimeout(delay);
-  }, [query]);
+    return () => clearTimeout(timer);
+  }, [query, onSearch]);
 
   return (
     <Input variant="rounded" size="md" className="bg-white">

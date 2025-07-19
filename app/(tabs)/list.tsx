@@ -7,27 +7,8 @@ import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Book } from "@/components/common/book";
 import { Link } from "expo-router";
-
-const MOCK_FAVORITES = [
-  {
-    id: "4",
-    title: "Pasaje al Misterio",
-    imageUrl:
-      "https://i.pinimg.com/originals/6b/14/c8/6b14c8c4d0eabc88bdfb0b27a6eacf49.jpg",
-  },
-  {
-    id: "5",
-    title: "El Instituto",
-    imageUrl:
-      "https://th.bing.com/th/id/R.e6844511509c80973e2604658207a5d9?rik=uSLIhbbJKDHaHg&pid=ImgRaw&r=0",
-  },
-  {
-    id: "6",
-    title: "Pesadilla en el Hospital General",
-    imageUrl:
-      "https://i.pinimg.com/736x/fc/f3/10/fcf310f53ad727b77d9c8d790f60f8ae.jpg",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getUserFavorites } from "@/services/favorites";
 
 const renderEmptyList = () => (
   <Box className="flex-1 justify-center items-center">
@@ -43,6 +24,11 @@ const renderEmptyList = () => (
 export default function TabTwoScreen() {
   const insets = useSafeAreaInsets();
 
+  const { data: favoriteBooks, isLoading } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: getUserFavorites,
+  });
+
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
       <Box className="p-4 border-b border-stone-200">
@@ -56,27 +42,40 @@ export default function TabTwoScreen() {
         </Text>
 
         <FlatList
-          data={MOCK_FAVORITES}
+          data={favoriteBooks}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Box key={item.id}>
-              <Link
-                href={{
-                  pathname: "/(books)/book/[id]",
-                  params: { id: item.id },
-                }}
-                asChild
-              >
-                <TouchableOpacity>
-                  <Book
-                    title={item.title}
-                    coverUrl={item.imageUrl}
-                    bookColor="#25a2c4"
-                  />
-                </TouchableOpacity>
-              </Link>
-            </Box>
-          )}
+          renderItem={({ item }) => {
+            const bookForNavigation = {
+              id: item.book_id,
+              title: item.title,
+              authors: item.authors,
+              coverUrl: item.coverUrl,
+              description: item.description,
+            };
+
+            return (
+              <Box key={item.id}>
+                <Link
+                  href={{
+                    pathname: "/(books)/book/[id]",
+                    params: {
+                      id: item.book_id || "",
+                      bookData: JSON.stringify(bookForNavigation),
+                    },
+                  }}
+                  asChild
+                >
+                  <TouchableOpacity>
+                    <Book
+                      title={item.title}
+                      coverUrl={item.coverUrl}
+                      bookColor="#25a2c4"
+                    />
+                  </TouchableOpacity>
+                </Link>
+              </Box>
+            );
+          }}
           numColumns={3}
           columnWrapperStyle={{ justifyContent: "space-around" }}
           ItemSeparatorComponent={() => <Box className="h-6" />}

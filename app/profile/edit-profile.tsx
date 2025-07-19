@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Alert, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
@@ -9,7 +9,6 @@ import { ThemedView } from "@/components/ThemedView";
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
 
-// Esta es ahora una pantalla completa que funciona como un modal
 export default function EditProfileModalScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();

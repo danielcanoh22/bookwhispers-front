@@ -1,5 +1,6 @@
 export type Book = {
   id: string;
+  book_id?: string;
   title: string;
   authors?: string[];
   coverUrl: string;
@@ -16,6 +17,16 @@ export type User = {
 
 export type Message = {
   id: string;
-  text: string;
   sender: "user" | "ai";
+  text: string;
+};
+
+export type Review = {
+  id: string;
+  text: string;
+  created_at: string;
+  user: {
+    username: string;
+    profile_picture: string;
+  };
 };

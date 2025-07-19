@@ -1,6 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 
-const BASE_URL = "https://bookwhispers-back.onrender.com";
+const BASE_URL = "http://192.168.20.31:3000";
 
 export const getRecommendedBooks = async () => {
   try {
