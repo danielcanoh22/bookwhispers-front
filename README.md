@@ -4,4 +4,3 @@ Este repositorio contiene el código del Frontend de la aplicación desarrollada
 
 --- 
 
-**🚧 En construcción...**
